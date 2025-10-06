@@ -83,18 +83,7 @@ export const createUser = async (data) => {
 
     return result.rows[0];
   } catch (error) {
-    if (error.code === "23505") {
-      // Unique constraint violation
-      throw new ApiError(409, "User with this visitor_id already exists");
-    }
-    if (error.code === "23514") {
-      // Check constraint violation
-      throw new ApiError(400, "Invalid data: constraint violation");
-    }
-    if (error instanceof ApiError) {
-      throw error;
-    }
-    throw new ApiError(500, "Database error while creating user");
+    return null;
   }
 };
 

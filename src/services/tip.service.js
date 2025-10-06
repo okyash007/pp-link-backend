@@ -49,15 +49,6 @@ export const createTip = async (data) => {
         
         return result.rows[0];
     } catch (error) {
-        if (error.code === '23503') { // Foreign key constraint violation
-            throw new ApiError(400, 'Invalid visitor_id: visitor does not exist');
-        }
-        if (error.code === '23514') { // Check constraint violation
-            throw new ApiError(400, 'Invalid data: constraint violation');
-        }
-        if (error instanceof ApiError) {
-            throw error;
-        }
-        throw new ApiError(500, 'Database error while creating tip');
+        return null;
     }
 };

@@ -4,6 +4,7 @@ import catchAsync from "../utils/catchAsync.js";
 import { ApiResponse } from "../utils/response.api.js";
 
 export const razorpayWebhook = catchAsync(async (req, res) => {
+
   if (req.body.event !== "payment.authorized") {
     console.log("not authorized");
     return res.json(new ApiResponse(200, "Webhook received"));
