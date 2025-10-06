@@ -1,6 +1,7 @@
 import { createTip } from "../services/tip.service.js";
 import { createUser } from "../services/user.service.js";
 import catchAsync from "../utils/catchAsync.js";
+import { ApiResponse } from "../utils/response.api.js";
 
 export const razorpayWebhook = catchAsync(async (req, res) => {
   if (req.body.event !== "payment.authorized") {
