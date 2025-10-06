@@ -1,3 +1,7 @@
+import axios from "axios";
+import ApiError from "./error.api.js";
+import httpStatus from "http-status";
+
 export const GeoIp = async (userIP) => {
   if (!userIP || typeof userIP !== "string" || !userIP.trim()) {
     throw new ApiError(httpStatus.BAD_REQUEST, "Invalid or missing user IP");
@@ -8,23 +12,7 @@ export const GeoIp = async (userIP) => {
   } catch (err) {
     console.error("IPAPI error:", err.response?.data || err.message);
     return {
-      ip_address: userIP || null,
-      city: null,
-      city_geoname_id: null,
-      region: null,
-      region_geoname_id: null,
-      postal_code: null,
-      country: null,
-      country_code: null,
-      country_geoname_id: null,
-      country_is_eu: null,
-      continent: null,
-      continent_code: null,
-      continent_geoname_id: null,
-      longitude: null,
-      latitude: null,
-      security: null,
-      timezone: null,
+      ip: userIP,
     };
   }
 };

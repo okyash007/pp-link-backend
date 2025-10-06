@@ -25,7 +25,7 @@ export const createEventGet = catchAsync(async (req, res, next) => {
     validationResult.data.event_name,
     validationResult.data.event_type,
     validationResult.data.visitor_id,
-    user_ip
+    "49.43.163.126"
   );
 
   res.json(new ApiResponse(200, res_data, "Event created successfully"));
