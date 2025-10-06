@@ -1,8 +1,7 @@
 import { GeoIp } from "../utils/geo.ip.js";
 import { parseIp } from "../utils/parse.ip.js";
 
-export const createEvent = async (event_name, event_type, visitor_id, event_data = null) => {
-  const user_ip = parseIp(req);
+export const createEvent = async (event_name, event_type, visitor_id, user_ip, event_data = null) => {
   const user_data = await GeoIp(user_ip);
 
   const record_event_data = {
