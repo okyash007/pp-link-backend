@@ -97,3 +97,9 @@ export const createUser = async (data) => {
     throw new ApiError(500, "Database error while creating user");
   }
 };
+
+export const getUserByVisitorId = async (visitor_id) => {
+  const query = `SELECT * FROM public.users WHERE visitor_id = $1`;
+  const result = await pool.query(query, [visitor_id]);
+  return result.rows[0];
+};

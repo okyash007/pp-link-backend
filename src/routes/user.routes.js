@@ -1,13 +1,8 @@
 import express from "express";
+import { getUser } from "../controllers/user.controller.js";
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  res.json({ message: "Hello World" });
-});
-router.post("/", (req, res) => {
-  console.log(JSON.stringify(req.body, null, 2));
-  res.json({ message: "Hello World" });
-});
+router.get("/:visitor_id", getUser);
 
 export default router;
