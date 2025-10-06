@@ -8,7 +8,7 @@ const createTipSchema = z.object({
   creator_id: z.string().min(1, "Creator ID is required"),
   amount: z.number().positive("Amount must be greater than 0"),
   currency: z.string().length(3, "Currency must be a 3-character code"),
-  message: z.string().min(1, "Message is required"),
+  message: z.string().optional(),
   payment_gateway: z.string().min(1, "Payment gateway is required"),
   payment_id: z.string().min(1, "Payment ID is required"),
 });
@@ -54,7 +54,7 @@ export const createTip = async (data) => {
       creator_id,
       amount,
       currency,
-      message,
+      message || null,
       payment_gateway,
       payment_id,
     ];
