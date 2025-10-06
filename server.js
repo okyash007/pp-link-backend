@@ -7,6 +7,7 @@ import routes from './src/routes/index.js';
 
 // Environment configuration
 import dotenv from 'dotenv';
+import { errorMiddleWare } from './src/middlewares/error.middleware.js';
 dotenv.config();
 
 const app = express();
@@ -41,13 +42,7 @@ app.get('/health', (req, res) => {
 app.use('/', routes);
 
 // Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({
-    error: 'Something went wrong!',
-    message: process.env.NODE_ENV === 'development' ? err.message : 'Internal server error'
-  });
-});
+app.use(errorMiddleWare);
 
 // Start server
 app.listen(PORT, () => {
