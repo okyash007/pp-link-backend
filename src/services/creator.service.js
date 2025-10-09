@@ -36,5 +36,5 @@ export const getFullCreatorByUsername = async (username) => {
       },
     ])
     .toArray();
-  return creator;
+  return creator[0];
 };
