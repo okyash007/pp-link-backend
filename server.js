@@ -8,6 +8,7 @@ import routes from './src/routes/index.js';
 // Environment configuration
 import dotenv from 'dotenv';
 import { errorMiddleWare } from './src/middlewares/error.middleware.js';
+import { initializeDatabase } from './src/utils/mongoDb.js';
 dotenv.config();
 
 const app = express();
@@ -19,6 +20,10 @@ app.use(cors()); // Enable CORS
 app.use(morgan('combined')); // Logging
 app.use(express.json()); // Parse JSON bodies
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
+
+// Connect to MongoDB
+initializeDatabase();
+
 
 // Basic route
 app.get('/', (req, res) => {
