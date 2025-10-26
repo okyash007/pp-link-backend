@@ -92,3 +92,31 @@ export const getTipsByCreatedAt = async (created_at, creator_id) => {
     return null;
   }
 };
+
+export const getLeaderboardByCreatorId = async (creator_id, limit = 5) => {
+  try {
+    const query = `
+      SELECT 
+        t.visitor_id,
+        SUM(t.amount) as total_amount,
+        t.currency,
+        COUNT(t.id) as tip_count,
+        u.name as visitor_name,
+        u.email as visitor_email,
+        u.phone as visitor_phone
+      FROM public.tips t
+      LEFT JOIN public.users u ON t.visitor_id = u.visitor_id
+      WHERE t.creator_id = $1
+      GROUP BY t.visitor_id, t.currency, u.name, u.email, u.phone
+      ORDER BY total_amount DESC
+      LIMIT $2
+    `;
+    
+    const result = await pool.query(query, [creator_id, limit]);
+    
+    return result.rows;
+  } catch (error) {
+    console.error("Error fetching leaderboard:", error);
+    return [];
+  }
+};

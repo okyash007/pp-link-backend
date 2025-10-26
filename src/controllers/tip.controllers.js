@@ -1,4 +1,7 @@
-import { getTipsByCreatedAt } from "../services/tip.service.js";
+import {
+  getTipsByCreatedAt,
+  getLeaderboardByCreatorId,
+} from "../services/tip.service.js";
 import catchAsync from "../utils/catchAsync.js";
 import ApiError from "../utils/error.api.js";
 import { ApiResponse } from "../utils/response.api.js";
@@ -21,4 +24,16 @@ export const getTips = catchAsync(async (req, res) => {
   }
 
   res.json(new ApiResponse(200, tips));
+});
+
+export const getLeaderboard = catchAsync(async (req, res) => {
+  const { creator_id } = req.params;
+
+  const leaderboard = await getLeaderboardByCreatorId(creator_id, 5);
+
+  if (!leaderboard || leaderboard.length === 0) {
+    throw new ApiError(404, "No leaderboard");
+  }
+
+  res.json(new ApiResponse(200, leaderboard));
 });
