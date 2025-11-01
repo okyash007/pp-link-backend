@@ -5,6 +5,7 @@ import { z } from "zod";
 // Zod schema for tip validation
 const createTipSchema = z.object({
   visitor_id: z.string().min(1, "Visitor ID is required"),
+  display_name: z.string().optional(),
   creator_id: z.string().min(1, "Creator ID is required"),
   amount: z.number().positive("Amount must be greater than 0"),
   currency: z.string().length(3, "Currency must be a 3-character code"),
@@ -26,6 +27,7 @@ export const createTip = async (data) => {
 
   const {
     visitor_id,
+    display_name,
     creator_id,
     amount,
     currency,
@@ -38,6 +40,7 @@ export const createTip = async (data) => {
     const query = `
             INSERT INTO public.tips (
                 visitor_id, 
+                display_name,
                 creator_id, 
                 amount, 
                 currency, 
@@ -45,12 +48,13 @@ export const createTip = async (data) => {
                 payment_gateway, 
                 payment_id, 
                 created_at
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7, EXTRACT(epoch FROM now()))
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, EXTRACT(epoch FROM now()))
             RETURNING *
         `;
 
     const values = [
       visitor_id,
+      display_name,
       creator_id,
       amount,
       currency,

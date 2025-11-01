@@ -19,6 +19,7 @@ export const razorpayWebhook = catchAsync(async (req, res) => {
 
   await createTip({
     visitor_id: req.body.payload.payment.entity.notes.visitor_id,
+    display_name: req.body.payload.payment.entity.notes.display_name,
     creator_id: req.body.payload.payment.entity.notes.creator_id,
     amount: req.body.payload.payment.entity.amount,
     currency: req.body.payload.payment.entity.currency,
