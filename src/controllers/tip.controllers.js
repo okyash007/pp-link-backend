@@ -1,6 +1,7 @@
 import {
   getTipsByCreatedAt,
   getLeaderboardByCreatorId,
+  getTipsByCreatorId,
 } from "../services/tip.service.js";
 import catchAsync from "../utils/catchAsync.js";
 import ApiError from "../utils/error.api.js";
@@ -24,6 +25,22 @@ export const getTips = catchAsync(async (req, res) => {
   }
 
   res.json(new ApiResponse(200, tips));
+});
+
+export const getTipsByCreatorIdController = catchAsync(async (req, res) => {
+  const { creator_id } = req.params;
+
+  const tips = await getTipsByCreatorId(creator_id);
+
+  res.json(new ApiResponse(200, tips));
+});
+
+export const getTransferCSVController = catchAsync(async (req, res) => {
+  const { creator_id } = req.params;
+
+  const transferCSV = await getTransferCSVByCreatorId(creator_id);
+
+  res.json(new ApiResponse(200, transferCSV));
 });
 
 export const getLeaderboard = catchAsync(async (req, res) => {

@@ -97,6 +97,19 @@ export const getTipsByCreatedAt = async (created_at, creator_id) => {
   }
 };
 
+
+export const getTipsByCreatorId = async (creator_id) => {
+  try {
+    const query = `
+      SELECT * FROM public.tips WHERE creator_id = $1
+    `;
+    const result = await pool.query(query, [creator_id]);
+    return result.rows;
+  } catch (error) {
+    return null;
+  }
+};
+
 export const getLeaderboardByCreatorId = async (creator_id, limit = 5) => {
   try {
     const query = `
@@ -124,3 +137,54 @@ export const getLeaderboardByCreatorId = async (creator_id, limit = 5) => {
     return [];
   }
 };
+
+
+export const updateTip = async (queryFilter, data) => {
+  try {
+    // Build SET clause from data object
+    const setClauses = [];
+    const values = [];
+    let paramIndex = 1;
+
+    Object.keys(data).forEach((key) => {
+      setClauses.push(`${key} = $${paramIndex}`);
+      values.push(data[key]);
+      paramIndex++;
+    });
+
+    // Build WHERE clause from queryFilter object
+    const whereClauses = [];
+    Object.keys(queryFilter).forEach((key) => {
+      whereClauses.push(`${key} = $${paramIndex}`);
+      values.push(queryFilter[key]);
+      paramIndex++;
+    });
+
+    if (setClauses.length === 0) {
+      throw new ApiError(400, "No data provided to update");
+    }
+
+    if (whereClauses.length === 0) {
+      throw new ApiError(400, "No query filter provided");
+    }
+
+    const query = `
+      UPDATE public.tips 
+      SET ${setClauses.join(", ")}
+      WHERE ${whereClauses.join(" AND ")}
+      RETURNING *
+    `;
+
+    const result = await pool.query(query, values);
+
+    if (result.rows.length === 0) {
+      return null;
+    }
+
+    return result.rows[0];
+  } catch (error) {
+    console.error("Error updating tip:", error);
+    throw error;
+  }
+};
+
