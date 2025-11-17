@@ -12,6 +12,8 @@ const createTipSchema = z.object({
   message: z.string().optional(),
   payment_gateway: z.string().min(1, "Payment gateway is required"),
   payment_id: z.string().min(1, "Payment ID is required"),
+  type: z.string().min(1, "Type is required"),
+  media: z.string().optional(),
 });
 
 export const createTip = async (data) => {
@@ -34,6 +36,8 @@ export const createTip = async (data) => {
     message,
     payment_gateway,
     payment_id,
+    type,
+    media,
   } = validationResult.data;
 
   try {
@@ -47,8 +51,10 @@ export const createTip = async (data) => {
                 message, 
                 payment_gateway, 
                 payment_id, 
+                type,
+                media,
                 created_at
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, EXTRACT(epoch FROM now()))
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, EXTRACT(epoch FROM now()))
             RETURNING *
         `;
 
@@ -61,6 +67,8 @@ export const createTip = async (data) => {
       message || null,
       payment_gateway,
       payment_id,
+      type,
+      media || null,
     ];
 
     const result = await pool.query(query, values);

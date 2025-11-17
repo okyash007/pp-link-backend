@@ -25,6 +25,8 @@ export const razorpayWebhook = catchAsync(async (req, res) => {
     message: req.body.payload.payment.entity.notes.message,
     payment_gateway: "razorpay",
     payment_id: req.body.payload.payment.entity.id,
+    type: req.body.payload.payment.entity.notes.type,
+    media: req.body.payload.payment.entity.notes.media,
   });
 
   res.json(new ApiResponse(200, "Webhook received"));
