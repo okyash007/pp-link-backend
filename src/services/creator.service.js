@@ -82,7 +82,7 @@ export const getCreatorWithOverlayByUsername = async (username) => {
           $project: {
             username: 1,
             image: 1,
-            banner: 1,
+            banner_image: 1,
             creator_id: 1,
             email: 1,
             socials: 1,
@@ -132,7 +132,7 @@ export const getCreatorWithLinkTreeByUsername = async (username) => {
           $project: {
             username: 1,
             image: 1,
-            banner: 1,
+            banner_image: 1,
             creator_id: 1,
             email: 1,
             socials: 1,
