@@ -4,6 +4,7 @@ import webhookRoutes from "./webhook.routes.js";
 import userRoutes from "./user.routes.js";
 import tipRoutes from "./tip.routes.js";
 import creatorRoutes from "./creator.routes.js";
+import orderRoutes from "./order.routes.js";
 
 const router = express.Router();
 
@@ -12,5 +13,6 @@ router.use("/webhook", webhookRoutes);
 router.use("/user", userRoutes);
 router.use("/tip", tipRoutes);
 router.use("/creator", creatorRoutes);
+router.use("/order", orderRoutes);
 
 export default router;
