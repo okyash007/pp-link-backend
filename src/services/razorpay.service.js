@@ -69,5 +69,36 @@ export const createOrder = async (orderData) => {
   }
 };
 
+/**
+ * Fetch the first payment ID linked to a Razorpay order
+ * @param {String} orderId - Razorpay order ID
+ * @returns {Promise<{success: boolean, payment_id: string|null, payments: Array, count: number}>}
+ */
+export const fetchPaymentIdByOrderId = async (orderId) => {
+  try {
+    if (!orderId) {
+      throw new Error("Order ID is required");
+    }
+
+    const razorpay = getRazorpayInstance();
+    const payments = await razorpay.orders.fetchPayments(orderId);
+    const firstPayment = payments?.items?.[0] || null;
+
+    return {
+      success: true,
+      payment_id: firstPayment?.id || null,
+      payments: payments?.items || [],
+      count: payments?.count ?? payments?.items?.length ?? 0,
+    };
+  } catch (error) {
+    console.error("Error fetching payments for order:", error);
+    throw new Error(
+      error?.error?.description ||
+        error?.message ||
+        "Failed to fetch payment for order"
+    );
+  }
+};
+
 export default getRazorpayInstance;
 

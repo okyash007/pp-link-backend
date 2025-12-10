@@ -1,3 +1,4 @@
+import { fetchPaymentIdByOrderId } from "../services/razorpay.service.js";
 import { createTip, updateTip } from "../services/tip.service.js";
 import { createUser } from "../services/user.service.js";
 import catchAsync from "../utils/catchAsync.js";
@@ -33,12 +34,15 @@ export const razorpayWebhook = catchAsync(async (req, res) => {
 });
 
 export const settlementWebhook = catchAsync(async (req, res) => {
+
+  const { payment_id } = await fetchPaymentIdByOrderId(req.body.payload.transfer.entity.source);
+
   await updateTip(
-    { payment_id: req.payload.transfer.entity.source },
+    { payment_id },
     {
       settled: true,
-      transfer_id: req.payload.transfer.entity.id,
-      amount: req.payload.transfer.entity.amount,
+      transfer_id: req.body.payload.transfer.entity.id,
+      amount: req.body.payload.transfer.entity.amount,
     }
   );
   res.json(new ApiResponse(200, "Webhook received"));
