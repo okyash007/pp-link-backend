@@ -62,7 +62,7 @@ export const settlementWebhook = catchAsync(async (req, res) => {
     {
       settled: true,
       transfer_id: req.body.payload.transfer.entity.id,
-      amount: req.body.payload.transfer.entity.amount,
+      transfer_amount: req.body.payload.transfer.entity.amount,
     }
   );
   res.json(new ApiResponse(200, "Webhook received"));
