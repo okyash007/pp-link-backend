@@ -35,7 +35,27 @@ export const razorpayWebhook = catchAsync(async (req, res) => {
 
 export const settlementWebhook = catchAsync(async (req, res) => {
 
-  const { payment_id } = await fetchPaymentIdByOrderId(req.body.payload.transfer.entity.source);
+  console.log(JSON.stringify(req.body, null, 2));
+
+  const source = req.body.payload.transfer.entity.source;
+  
+  // Check if source is a payment_id (starts with "pay_") or order_id (starts with "order_")
+  let payment_id;
+  
+  if (source.startsWith("pay_")) {
+    // Source is already a payment_id
+    payment_id = source;
+  } else if (source.startsWith("order_")) {
+    // Source is an order_id, fetch the payment_id
+    const result = await fetchPaymentIdByOrderId(source);
+    payment_id = result.payment_id;
+  } else {
+    throw new Error(`Invalid source format: ${source}. Expected payment_id (pay_*) or order_id (order_*)`);
+  }
+
+  if (!payment_id) {
+    throw new Error(`Could not determine payment_id from source: ${source}`);
+  }
 
   await updateTip(
     { payment_id },
